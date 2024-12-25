@@ -504,4 +504,33 @@ button:disabled {
     padding-top: 15px;
     border-top: 2px solid var(--border-color);
 }
+
+.question-image {
+    margin: 20px auto;
+    max-width: 600px;
+    text-align: center;
+}
+
+.question-image img {
+    max-width: 100%;
+    height: auto;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 5px;
+    background: white;
+}
+
+.image-caption {
+    font-size: 0.9em;
+    color: #666;
+    margin-top: 10px;
+    font-style: italic;
+}
+
+.question-text {
+    margin-bottom: 20px;
+    font-size: 1.2em;
+    line-height: 1.4;
+    color: var(--text-dark);
+}
  

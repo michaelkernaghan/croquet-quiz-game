@@ -93,6 +93,8 @@ function showQuestion() {
     const answerButtons = document.querySelectorAll('.answer-button');
     const nextButton = document.getElementById('nextButton');
     const dubiousButton = document.getElementById('dubiousButton');
+    const questionImage = document.getElementById('questionImage');
+    const imageCaption = document.getElementById('imageCaption');
 
     // Update question counter
     document.getElementById('currentQuestion').textContent = currentQuestionIndex + 1;
@@ -102,6 +104,17 @@ function showQuestion() {
     const currentQuestion = currentQuestions[currentQuestionIndex];
     console.log('Current question:', currentQuestion); // Debug log
     questionContainer.textContent = currentQuestion.question;
+
+    // Handle image if present
+    if (currentQuestion.image) {
+        questionImage.src = currentQuestion.image.path;
+        questionImage.style.display = 'block';
+        imageCaption.textContent = currentQuestion.image.caption;
+        imageCaption.style.display = 'block';
+    } else {
+        questionImage.style.display = 'none';
+        imageCaption.style.display = 'none';
+    }
 
     // Reset and populate answer buttons
     const answers = currentQuestion.answers;
