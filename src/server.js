@@ -9,7 +9,10 @@ const PORT = 3000;
 // Middleware
 app.use(cors());
 app.use(express.json());
+
+// Serve static files
 app.use(express.static(path.join(__dirname, 'frontend')));
+app.use('/rag', express.static(path.join(__dirname, '..', 'rag')));
 
 // Route to save dubious questions
 app.post('/api/dubious-questions', async (req, res) => {

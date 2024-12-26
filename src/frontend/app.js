@@ -70,7 +70,7 @@ function startQuiz() {
     currentQuestionIndex = 0;
     score = 0;
     
-    // Reset score display
+    // Initialize score and update display
     document.getElementById('currentScore').textContent = '0';
     document.getElementById('currentTotal').textContent = '0';
 
@@ -80,72 +80,41 @@ function startQuiz() {
     
     // Show quiz content
     document.getElementById('quizContent').style.display = 'block';
-    showQuestion();
+    showQuestion(currentQuestions[currentQuestionIndex]);
 }
 
-function showQuestion() {
-    if (!currentQuestions[currentQuestionIndex]) {
-        console.error('No question available at index:', currentQuestionIndex);
-        return;
-    }
-
-    const questionContainer = document.getElementById('questionContainer');
-    const answerButtons = document.querySelectorAll('.answer-button');
-    const nextButton = document.getElementById('nextButton');
-    const dubiousButton = document.getElementById('dubiousButton');
-    const questionImage = document.getElementById('questionImage');
-    const imageCaption = document.getElementById('imageCaption');
-
-    // Update question counter
-    document.getElementById('currentQuestion').textContent = currentQuestionIndex + 1;
-    document.getElementById('totalQuestions').textContent = QUESTIONS_PER_GAME;
-
-    // Show question
-    const currentQuestion = currentQuestions[currentQuestionIndex];
-    console.log('Current question:', currentQuestion); // Debug log
-    questionContainer.textContent = currentQuestion.question;
-
+function showQuestion(question) {
+    document.getElementById('question-text').textContent = question.question;
+    
     // Handle image if present
-    if (currentQuestion.image) {
-        questionImage.src = currentQuestion.image.path;
-        questionImage.style.display = 'block';
-        imageCaption.textContent = currentQuestion.image.caption;
-        imageCaption.style.display = 'block';
+    const imageContainer = document.getElementById('question-image-container');
+    const image = document.getElementById('question-image');
+    const caption = document.getElementById('question-image-caption');
+    
+    if (question.image) {
+        image.src = question.image.path;
+        caption.textContent = question.image.caption;
+        imageContainer.style.display = 'block';
     } else {
-        questionImage.style.display = 'none';
-        imageCaption.style.display = 'none';
+        imageContainer.style.display = 'none';
     }
 
-    // Reset and populate answer buttons
-    const answers = currentQuestion.answers;
-    console.log('Answers:', answers); // Debug log
+    // Clear previous answers
+    const answersContainer = document.getElementById('answers-container');
+    answersContainer.innerHTML = '';
 
-    answerButtons.forEach((button, index) => {
-        const answer = answers[index];
-        if (!answer) {
-            console.error('No answer available at index:', index);
-            button.style.display = 'none';
-            return;
-        }
-        
-        // Set button text and properties
-        button.textContent = answer.answer;
-        button.style.display = 'flex';
-        button.style.visibility = 'visible';
-        button.style.opacity = '1';
-        button.disabled = false;
+    // Add new answer buttons
+    question.answers.forEach((answer, index) => {
+        const button = document.createElement('button');
         button.className = 'answer-button';
-        
-        // Add click handler
-        button.onclick = () => selectAnswer(answer.correct);
-        
-        console.log(`Button ${index + 1} text:`, button.textContent); // Debug log
+        button.textContent = answer.answer;
+        button.onclick = () => selectAnswer(index);
+        answersContainer.appendChild(button);
     });
 
-    // Hide both next and dubious buttons
-    nextButton.style.display = 'none';
-    dubiousButton.style.display = 'none';
-    dubiousButton.disabled = false;
+    // Hide the next button until an answer is selected
+    document.getElementById('next-button').style.display = 'none';
+    document.getElementById('dubious-button').style.display = 'none';
 }
 
 function selectAnswer(isCorrect) {
@@ -191,7 +160,7 @@ function selectAnswer(isCorrect) {
 function handleNext() {
     currentQuestionIndex++;
     if (currentQuestionIndex < QUESTIONS_PER_GAME) {
-        showQuestion();
+        showQuestion(currentQuestions[currentQuestionIndex]);
     } else {
         showResults();
     }
